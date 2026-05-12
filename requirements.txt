@@ -1,0 +1,2 @@
+python-jose
+requests<=2.26.0
