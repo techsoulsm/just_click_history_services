@@ -4,16 +4,16 @@ data "archive_file" "archive" {
   source_dir = "../../build/package"
 }
 
-module "history_service_lambda" {
+module "get_history_lambda" {
   source = "../modules/lambdas"
   file_path = "../../build/artifacts/source.zip"
-  handler = "app.lambdaHandler"
-  lambda_name = "history_service_lambda"
+  handler = "app.getHistory"
+  lambda_name = "get_history_lambda"
   memory_size = 256
   runtime = "python3.11"
   timeout = 300
   policy_document = [
-    data.aws_iam_policy_document.cognito_policy.json
+    data.aws_iam_policy_document.history_service_policy.json
   ]
   depends_on = [
     data.archive_file.archive,

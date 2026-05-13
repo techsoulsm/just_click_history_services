@@ -1,39 +1,32 @@
 locals {
-  api_name = "authentication_api"
+  api_name = "history_api"
 }
 module "api_gateway_rest_api" {
   source = "../modules/api_gateway"
   rest_api_name = local.api_name
 }
 
-module "authentication" {
+module "get_history" {
   source = "../modules/api_gateway"
   parent_id = lookup(module.api_gateway_rest_api.rest_api_root_id, local.api_name)
-  path_part = "authentication"
+  path_part = "get_history"
   rest_api_id = lookup(module.api_gateway_rest_api.rest_api_id, local.api_name)
 }
 
-module "action" {
+module "get_history_by" {
   source = "../modules/api_gateway"
-  path_part = "{action}"
-  parent_id = lookup(module.authentication.rest_api_resource_id, module.authentication.path_part)
+  path_part = "{get_history_by}"
+  parent_id = lookup(module.get_history.rest_api_resource_id, module.get_history.path_part)
   rest_api_id = lookup(module.api_gateway_rest_api.rest_api_id, local.api_name)
-  http_method = ["POST"]
+  http_method = ["GET"]
   integration_type = "AWS_PROXY"
-  function_names = [module.authentication_lambda.lambda_name]
-  depends_on = [module.authentication_lambda]
+  function_names = [module.get_history_lambda.lambda_name]
+  depends_on = [module.get_history_lambda]
 }
 ################################
-module "beta_deployment" {
+module "deployment" {
   source = "../modules/api_gateway"
-  stage_name = "beta"
+  stage_name = var.stage
   rest_api_id = lookup(module.api_gateway_rest_api.rest_api_id, local.api_name)
-  depends_on = [module.action]
-}
-
-module "prod_deployment" {
-  source = "../modules/api_gateway"
-  stage_name = "prod"
-  rest_api_id = lookup(module.api_gateway_rest_api.rest_api_id, local.api_name)
-  depends_on = [module.action]
+  depends_on = [module.get_history_by]
 }
