@@ -13,9 +13,9 @@ module "get_history" {
   rest_api_id = lookup(module.api_gateway_rest_api.rest_api_id, local.api_name)
 }
 
-module "get_history_by" {
+module "get_history_action" {
   source = "../modules/api_gateway"
-  path_part = "{get_history_by}"
+  path_part = "{get_history_action}"
   parent_id = lookup(module.get_history.rest_api_resource_id, module.get_history.path_part)
   rest_api_id = lookup(module.api_gateway_rest_api.rest_api_id, local.api_name)
   http_method = ["GET"]
@@ -28,5 +28,5 @@ module "deployment" {
   source = "../modules/api_gateway"
   stage_name = var.stage
   rest_api_id = lookup(module.api_gateway_rest_api.rest_api_id, local.api_name)
-  depends_on = [module.get_history_by]
+  depends_on = [module.get_history_action]
 }

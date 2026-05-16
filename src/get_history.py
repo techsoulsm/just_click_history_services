@@ -7,7 +7,7 @@ def get_history_decorator(function):
     def wrapper(*args, **kargs):
         history_table = helper.get_table('justclick_history')
 
-        def user_id(*args, **kargs):
+        def get_transactions_by_user(*args, **kargs):
             input_data = args[0]
             manditory_fields = ['user_id']
             for attribute in manditory_fields:
@@ -17,7 +17,7 @@ def get_history_decorator(function):
                 KeyConditionExpression=Key('user_id').eq(input_data['user_id']))['Items']
             return response
 
-        def timestamp(*args, **kargs):
+        def get_transactions_by_timestamp(*args, **kargs):
             input_data = args[0]
             manditory_fields = ['user_id', 'end_timestamp']
             for attribute in manditory_fields:
@@ -33,7 +33,7 @@ def get_history_decorator(function):
                 )['Items']
             return response    
 
-        def transaction_id(*args, **kargs):
+        def get_transaction_by_id(*args, **kargs):
             input_data = args[0]
             manditory_fields = ['user_id', 'transaction_id']
             for attribute in manditory_fields:
@@ -45,7 +45,7 @@ def get_history_decorator(function):
             )['Items']
             return response
         
-        def last_transaction(*args, **kargs):
+        def get_last_transaction_by_user(*args, **kargs):
             input_data = args[0]
             manditory_fields = ['user_id']
             for attribute in manditory_fields:
@@ -58,7 +58,7 @@ def get_history_decorator(function):
             )['Items']
             return response
         
-        def total_transactions(*args, **kargs):
+        def get_total_transactions_by_user(*args, **kargs):
             input_data = args[0]
             manditory_fields = ['user_id', 'end_timestamp']
             for attribute in manditory_fields:
@@ -70,8 +70,8 @@ def get_history_decorator(function):
             )['Count']
             return response
 
-        allowed_operations = {'user_id': user_id, 'timestamp': timestamp, 'transaction_id': transaction_id, 
-                              'last_transaction': last_transaction, 'total_transactions': total_transactions}
+        allowed_operations = {'get_transactions_by_user': get_transactions_by_user, 'get_transactions_by_timestamp': get_transactions_by_timestamp, 'get_transaction_by_id': get_transaction_by_id, 
+                              'get_last_transaction_by_user': get_last_transaction_by_user, 'get_total_transactions_by_user': get_total_transactions_by_user}
         if args[1] not in allowed_operations:
             return f"provide one of the valid actions : {allowed_operations.keys()}"
         return allowed_operations[args[1]](*args, **kargs)
@@ -80,5 +80,5 @@ def get_history_decorator(function):
 
 
 @get_history_decorator
-def get_history(input_data, get_history_by, headers):
-    return input_data, get_history_by, headers
+def get_history(input_data, get_history_action, headers):
+    return input_data, get_history_action, headers
