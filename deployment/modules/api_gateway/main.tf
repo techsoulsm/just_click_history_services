@@ -151,15 +151,24 @@ resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = var.rest_api_id
 
   triggers = {
-    redeploy = sha1(jsonencode({
-      methods      = aws_api_gateway_method.method.*.http_method
-      uris         = aws_api_gateway_integration.integration.*.uri
-      templates    = var.request_templates
-      request_params = var.request_parameters
-    }))
+    redeploy = sha1(jsonencode(merge({
+      rest_api_id          = var.rest_api_id
+      path_part            = var.path_part
+      methods              = aws_api_gateway_method.method.*.http_method
+      uris                 = aws_api_gateway_integration.integration.*.uri
+      request_templates    = var.request_templates
+      request_parameters   = var.request_parameters
+      cache_key_parameters = var.cache_key_parameters
+      cache_namespace      = var.cache_namespace
+      timeout              = var.timeout
+    })))
   }
 
   depends_on = [aws_api_gateway_integration.integration]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_api_gateway_stage" "stage" {
@@ -167,9 +176,6 @@ resource "aws_api_gateway_stage" "stage" {
   deployment_id = aws_api_gateway_deployment.deployment[0].id
   rest_api_id   = var.rest_api_id
   stage_name    = var.stage_name
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_api_gateway_gateway_response" "response_4xx" {
