@@ -147,8 +147,19 @@ resource "aws_lambda_permission" "lambda_permission" {
 }
 
 resource "aws_api_gateway_deployment" "deployment" {
-  count = var.stage_name == null ? 0 : 1
+  count      = var.stage_name == null ? 0 : 1
   rest_api_id = var.rest_api_id
+
+  triggers = {
+    redeploy = sha1(jsonencode({
+      methods      = aws_api_gateway_method.method.*.http_method
+      uris         = aws_api_gateway_integration.integration.*.uri
+      templates    = var.request_templates
+      request_params = var.request_parameters
+    }))
+  }
+
+  depends_on = [aws_api_gateway_integration.integration]
 }
 
 resource "aws_api_gateway_stage" "stage" {
@@ -156,6 +167,9 @@ resource "aws_api_gateway_stage" "stage" {
   deployment_id = aws_api_gateway_deployment.deployment[0].id
   rest_api_id   = var.rest_api_id
   stage_name    = var.stage_name
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_api_gateway_gateway_response" "response_4xx" {

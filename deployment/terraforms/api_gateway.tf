@@ -28,5 +28,5 @@ module "deployment" {
   source = "../modules/api_gateway"
   stage_name = var.stage
   rest_api_id = lookup(module.api_gateway_rest_api.rest_api_id, local.api_name)
-  depends_on = [module.get_history_action]
+  depends_on = [module.get_history_action, module.get_history]
 }
