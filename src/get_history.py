@@ -12,6 +12,7 @@ def get_history_decorator(function):
         history_table = helper.get_table('justclick_history')
 
         def get_transactions_by_user(*args, **kargs):
+            print("get_transactions_by_user called")
             input_data = args[0]
             manditory_fields = ['user_id']
             limit = int(input_data.get('limit', 50))
@@ -40,6 +41,7 @@ def get_history_decorator(function):
             return results
 
         def get_transactions_by_timestamp(*args, **kargs):
+            print("get_transactions_by_timestamp called")
             input_data = args[0]
             manditory_fields = ['user_id']
             for attribute in manditory_fields:
@@ -52,7 +54,6 @@ def get_history_decorator(function):
                 if helper.check_is_user_admin(input_data['user_id']).lower() == 'true':
                     query_response = history_table.scan(
                         FilterExpression=Key('unique_id').between(start_timestamp, end_timestamp),
-                        ScanIndexForward=True,
                         Limit=limit,
                         ExclusiveStartKey=json.loads(base64.b64decode(input_data['LastEvaluatedKey']).decode('utf-8'))
                     )
@@ -67,7 +68,6 @@ def get_history_decorator(function):
                 if helper.check_is_user_admin(input_data['user_id']).lower() == 'true':
                     query_response = history_table.scan(
                         FilterExpression=Key('unique_id').between(start_timestamp, end_timestamp),
-                        ScanIndexForward=True,
                         Limit=limit
                     )
                 else:
@@ -85,6 +85,7 @@ def get_history_decorator(function):
             return results    
 
         def get_transaction_by_id(*args, **kargs):
+            print("get_transaction_by_id called")
             input_data = args[0]
             manditory_fields = ['user_id', 'transaction_id']
             for attribute in manditory_fields:
@@ -97,6 +98,7 @@ def get_history_decorator(function):
             return response
         
         def get_last_transaction_by_user(*args, **kargs):
+            print("get_last_transaction_by_user called")
             input_data = args[0]
             manditory_fields = ['user_id']
             for attribute in manditory_fields:
@@ -110,13 +112,16 @@ def get_history_decorator(function):
             return response
         
         def get_total_transactions_by_user(*args, **kargs):
+            print("get_total_transactions_by_user called")
             input_data = args[0]
-            manditory_fields = ['user_id', 'end_timestamp']
+            manditory_fields = ['user_id']
             for attribute in manditory_fields:
                 if attribute not in input_data:
                     raise Exception(f"Please provide {attribute}")
+            start_timestamp = int(input_data.get('start_timestamp', 0))
+            end_timestamp = int(input_data.get('end_timestamp', time.time()))
             response = history_table.query(
-                KeyConditionExpression=Key('user_id').eq(input_data['user_id']) & Key('unique_id').between(int(input_data.get('start_timestamp', 0)),int(input_data['end_timestamp'])),
+                KeyConditionExpression=Key('user_id').eq(input_data['user_id']) & Key('unique_id').between(start_timestamp, end_timestamp),
                 Select='COUNT'
             )['Count']
             return response
