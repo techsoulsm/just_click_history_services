@@ -9,7 +9,8 @@ import time
 def get_history_decorator(function):
 
     def wrapper(*args, **kargs):
-        history_table = helper.get_table('justclick_history')
+        constants = helper.Constant()
+        history_table = helper.get_table(constants.HISTORY_TABLE_NAME)
 
         def get_transactions_by_user(*args, **kargs):
             print("get_transactions_by_user called")
@@ -21,14 +22,14 @@ def get_history_decorator(function):
                     raise Exception(f"Please provide {attribute}")
             if 'LastEvaluatedKey' in input_data:
                 query_response = history_table.query(
-                    KeyConditionExpression=Key('user_id').eq(input_data['user_id']),
+                    KeyConditionExpression=Key(constants.HISTORY_TABLE_HASH_KEY).eq(input_data['user_id']),
                     ScanIndexForward=True,
                     Limit=limit,
                     ExclusiveStartKey=json.loads(base64.b64decode(input_data['LastEvaluatedKey']).decode('utf-8'))
                 )
             else:
                 query_response = history_table.query(
-                    KeyConditionExpression=Key('user_id').eq(input_data['user_id']),
+                    KeyConditionExpression=Key(constants.HISTORY_TABLE_HASH_KEY).eq(input_data['user_id']),
                     ScanIndexForward=True,
                     Limit=limit
                 )
@@ -53,13 +54,13 @@ def get_history_decorator(function):
             if 'LastEvaluatedKey' in input_data:
                 if helper.check_is_user_admin(input_data['user_id']).lower() == 'true':
                     query_response = history_table.scan(
-                        FilterExpression=Key('unique_id').between(start_timestamp, end_timestamp),
+                        FilterExpression=Key(constants.HISTORY_TABLE_RANGE_KEY).between(start_timestamp, end_timestamp),
                         Limit=limit,
                         ExclusiveStartKey=json.loads(base64.b64decode(input_data['LastEvaluatedKey']).decode('utf-8'))
                     )
                 else:
                     query_response = history_table.query(
-                        KeyConditionExpression=Key('user_id').eq(input_data['user_id']) & Key('unique_id').between(start_timestamp, end_timestamp),
+                        KeyConditionExpression=Key(constants.HISTORY_TABLE_HASH_KEY).eq(input_data['user_id']) & Key(constants.HISTORY_TABLE_RANGE_KEY).between(start_timestamp, end_timestamp),
                         ScanIndexForward=True,
                         Limit=limit,
                         ExclusiveStartKey=json.loads(base64.b64decode(input_data['LastEvaluatedKey']).decode('utf-8'))
@@ -67,12 +68,12 @@ def get_history_decorator(function):
             else:
                 if helper.check_is_user_admin(input_data['user_id']).lower() == 'true':
                     query_response = history_table.scan(
-                        FilterExpression=Key('unique_id').between(start_timestamp, end_timestamp),
+                        FilterExpression=Key(constants.HISTORY_TABLE_RANGE_KEY).between(start_timestamp, end_timestamp),
                         Limit=limit
                     )
                 else:
                     query_response = history_table.query(
-                        KeyConditionExpression=Key('user_id').eq(input_data['user_id']) & Key('unique_id').between(start_timestamp, end_timestamp),
+                        KeyConditionExpression=Key(constants.HISTORY_TABLE_HASH_KEY).eq(input_data['user_id']) & Key(constants.HISTORY_TABLE_RANGE_KEY).between(start_timestamp, end_timestamp),
                         ScanIndexForward=True,
                         Limit=limit
                     )
@@ -92,8 +93,8 @@ def get_history_decorator(function):
                 if attribute not in input_data:
                     raise Exception(f"Please provide {attribute}")
             response = history_table.query(
-                KeyConditionExpression=Key('user_id').eq(input_data['user_id']),
-                FilterExpression=Attr('transaction_id').eq(input_data['transaction_id'])
+                KeyConditionExpression=Key(constants.HISTORY_TABLE_HASH_KEY).eq(input_data['user_id']),
+                FilterExpression=Attr(constants.HISTORY_TABLE_TRANSACTIONS_INDEX_HASH_KEY).eq(input_data['transaction_id'])
             )['Items']
             return response
         
@@ -105,7 +106,7 @@ def get_history_decorator(function):
                 if attribute not in input_data:
                     raise Exception(f"Please provide {attribute}")
             response = history_table.query(
-                KeyConditionExpression=Key('user_id').eq(input_data['user_id']),
+                KeyConditionExpression=Key(constants.HISTORY_TABLE_HASH_KEY).eq(input_data['user_id']),
                 ScanIndexForward=False,
                 Limit=1
             )['Items']
@@ -121,7 +122,7 @@ def get_history_decorator(function):
             start_timestamp = int(input_data.get('start_timestamp', 0))
             end_timestamp = int(input_data.get('end_timestamp', time.time()))
             response = history_table.query(
-                KeyConditionExpression=Key('user_id').eq(input_data['user_id']) & Key('unique_id').between(start_timestamp, end_timestamp),
+                KeyConditionExpression=Key(constants.HISTORY_TABLE_HASH_KEY).eq(input_data['user_id']) & Key(constants.HISTORY_TABLE_RANGE_KEY).between(start_timestamp, end_timestamp),
                 Select='COUNT'
             )['Count']
             return response
