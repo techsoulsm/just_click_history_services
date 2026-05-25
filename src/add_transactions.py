@@ -15,12 +15,12 @@ def add_transactions_decorator(function):
         def upload_transaction(*args, **kargs):
             print("upload_transaction called")
             input_data = args[0]
-            manditory_fields = ['email', 'transaction_id', 'amount']
+            manditory_fields = ['email', 'transaction_id', 'payment_amount']
             for attribute in manditory_fields:
                 if attribute not in input_data:
                     raise Exception(f"Please provide {attribute}")
-            input_data['unique_id'] = int(time.time() * 1000)
-            cognito_id = helper.get_cognito_id_by_email(input_data['email'], input_data.get('stage'))
+            input_data['unique_id'] = int(time.time())
+            cognito_id = helper.get_cognito_id_by_email(input_data['email'], input_data.get('stage_name'))
             input_data['user_id'] = cognito_id
             dynamodb_response = history_table.put_item(Item=input_data)
             if dynamodb_response['ResponseMetadata']['HTTPStatusCode'] != 200:
@@ -30,16 +30,17 @@ def add_transactions_decorator(function):
         def bulk_upload_transactions(*args, **kargs):
             print("bulk_upload_transactions called")
             input_data = args[0]
-            if 'transactions' not in input_data:
-                raise Exception("Please provide transactions")
-            with history_table.batch_writer() as batch:
-                for transaction in input_data['transactions']:
-                    manditory_fields = ['user_id', 'transaction_id', 'amount']
-                    for attribute in manditory_fields:
-                        if attribute not in transaction:
-                            raise Exception(f"Please provide {attribute} in all transactions")
-                    transaction['unique_id'] = int(time.time() * 1000)
-                    batch.put_item(Item=transaction)
+            print(input_data)
+            # if 'transactions' not in input_data:
+            #     raise Exception("Please provide transactions")
+            # with history_table.batch_writer() as batch:
+            #     for transaction in input_data['transactions']:
+            #         manditory_fields = ['user_id', 'transaction_id', 'amount']
+            #         for attribute in manditory_fields:
+            #             if attribute not in transaction:
+            #                 raise Exception(f"Please provide {attribute} in all transactions")
+            #         transaction['unique_id'] = int(time.time())
+            #         batch.put_item(Item=transaction)
             return "Transactions uploaded successfully"
         
 

@@ -17,6 +17,7 @@ resource "aws_api_gateway_rest_api" "rest_api" {
   endpoint_configuration {
     types = [var.endpoint_type]
   }
+  binary_media_types = var.binary_media_types
 }
 
 resource "aws_api_gateway_resource" "resource" {
@@ -49,6 +50,8 @@ resource "aws_api_gateway_integration" "integration" {
   integration_http_method = "POST"
   request_templates = var.request_templates
   request_parameters = var.async_invoke ? local.async_header : {}
+  passthrough_behavior = var.passthrough_behavior
+  content_handling     = var.content_handling
   depends_on = [aws_api_gateway_method.method]
 }
 

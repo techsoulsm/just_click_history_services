@@ -20,6 +20,7 @@ resource "aws_lambda_function" "lambda" {
   filename = var.file_path
   source_code_hash = filebase64sha256(var.file_path)
   tags = var.tags
+  layers = length(var.layers) > 0 ? var.layers : null
 
   dynamic "environment" {
     for_each = length(var.environment_variables) > 0 ? var.environment_variables : {}

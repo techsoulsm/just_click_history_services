@@ -1,0 +1,357 @@
+{
+  "info": {
+    "_postman_id": "b281c532-e9a7-4a24-b6a6-3cbe515c9e6d",
+    "name": "just_click_history_services",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "27791335"
+  },
+  "item": [
+    {
+      "name": "get_history_api",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/{stage}/get_history/{get_history_action}",
+          "protocol": "https",
+          "host": [
+            "dq9arr162l",
+            "execute-api",
+            "eu-west-1",
+            "amazonaws",
+            "com"
+          ],
+          "path": [
+            "{stage}",
+            "get_history",
+            "{get_history_action}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "get_history_by_user_id",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/get_history/get_transactions_by_user?user_id=32850474-e031-70a5-a252-6629143f3cf8&limit=2&LastEvaluatedKey=eyJ1bmlxdWVfaWQiOiAxNzc4NjQ3MTY2LCAidXNlcl9pZCI6ICIzMjg1MDQ3NC1lMDMxLTcwYTUtYTI1Mi02NjI5MTQzZjNjZjgifQ==",
+              "protocol": "https",
+              "host": [
+                "dq9arr162l",
+                "execute-api",
+                "eu-west-1",
+                "amazonaws",
+                "com"
+              ],
+              "path": [
+                "beta",
+                "get_history",
+                "get_transactions_by_user"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "32850474-e031-70a5-a252-6629143f3cf8"
+                },
+                {
+                  "key": "limit",
+                  "value": "2"
+                },
+                {
+                  "key": "LastEvaluatedKey",
+                  "value": "eyJ1bmlxdWVfaWQiOiAxNzc4NjQ3MTY2LCAidXNlcl9pZCI6ICIzMjg1MDQ3NC1lMDMxLTcwYTUtYTI1Mi02NjI5MTQzZjNjZjgifQ=="
+                }
+              ]
+            }
+          },
+          "_postman_previewlanguage": null,
+          "header": null,
+          "cookie": [],
+          "body": null
+        },
+        {
+          "name": "get_history_timestamp",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/get_history/get_transactions_by_timestamp?user_id=32850474-e031-70a5-a252-6629143f3cf8&end_timestamp=1778820932&start_timestamp=1778387966&limit=2&LastEvaluatedKey=eyJ1bmlxdWVfaWQiOiAxNzc4NDc0MzY2LCAidXNlcl9pZCI6ICIzMjg1MDQ3NC1lMDMxLTcwYTUtYTI1Mi02NjI5MTQzZjNjZjgifQ==",
+              "protocol": "https",
+              "host": [
+                "dq9arr162l",
+                "execute-api",
+                "eu-west-1",
+                "amazonaws",
+                "com"
+              ],
+              "path": [
+                "beta",
+                "get_history",
+                "get_transactions_by_timestamp"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "32850474-e031-70a5-a252-6629143f3cf8"
+                },
+                {
+                  "key": "end_timestamp",
+                  "value": "1778820932"
+                },
+                {
+                  "key": "start_timestamp",
+                  "value": "1778387966"
+                },
+                {
+                  "key": "limit",
+                  "value": "2"
+                },
+                {
+                  "key": "LastEvaluatedKey",
+                  "value": "eyJ1bmlxdWVfaWQiOiAxNzc4NDc0MzY2LCAidXNlcl9pZCI6ICIzMjg1MDQ3NC1lMDMxLTcwYTUtYTI1Mi02NjI5MTQzZjNjZjgifQ=="
+                }
+              ]
+            }
+          },
+          "_postman_previewlanguage": null,
+          "header": null,
+          "cookie": [],
+          "body": null
+        },
+        {
+          "name": "get_history_by_transaction_id",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/get_history/get_transaction_by_id?user_id=32850474-e031-70a5-a252-6629143f3cf8&transaction_id=8b864f6e-4e50-4449-820d-ff7666904638",
+              "protocol": "https",
+              "host": [
+                "dq9arr162l",
+                "execute-api",
+                "eu-west-1",
+                "amazonaws",
+                "com"
+              ],
+              "path": [
+                "beta",
+                "get_history",
+                "get_transaction_by_id"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "32850474-e031-70a5-a252-6629143f3cf8"
+                },
+                {
+                  "key": "transaction_id",
+                  "value": "8b864f6e-4e50-4449-820d-ff7666904638"
+                }
+              ]
+            }
+          },
+          "_postman_previewlanguage": null,
+          "header": null,
+          "cookie": [],
+          "body": null
+        },
+        {
+          "name": "get_last_payment",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/get_history/get_last_transaction_by_user?user_id=32850474-e031-70a5-a252-6629143f3cf8",
+              "protocol": "https",
+              "host": [
+                "dq9arr162l",
+                "execute-api",
+                "eu-west-1",
+                "amazonaws",
+                "com"
+              ],
+              "path": [
+                "beta",
+                "get_history",
+                "get_last_transaction_by_user"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "32850474-e031-70a5-a252-6629143f3cf8"
+                }
+              ]
+            }
+          },
+          "_postman_previewlanguage": null,
+          "header": null,
+          "cookie": [],
+          "body": null
+        },
+        {
+          "name": "get_total_transactions",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/get_history/get_total_transactions_by_user?user_id=32850474-e031-70a5-a252-6629143f3cf8&end_timestamp=1778820932&start_timestamp=1778387966",
+              "protocol": "https",
+              "host": [
+                "dq9arr162l",
+                "execute-api",
+                "eu-west-1",
+                "amazonaws",
+                "com"
+              ],
+              "path": [
+                "beta",
+                "get_history",
+                "get_total_transactions_by_user"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "32850474-e031-70a5-a252-6629143f3cf8"
+                },
+                {
+                  "key": "end_timestamp",
+                  "value": "1778820932"
+                },
+                {
+                  "key": "start_timestamp",
+                  "value": "1778387966"
+                }
+              ]
+            }
+          },
+          "_postman_previewlanguage": null,
+          "header": null,
+          "cookie": [],
+          "body": null
+        },
+        {
+          "name": "admin_get_transactions_by timestamp",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/get_history/get_transactions_by_timestamp?user_id=32850474-e031-70a5-a252-6629143f3cf8&end_timestamp=1779820932&limit=4",
+              "protocol": "https",
+              "host": [
+                "dq9arr162l",
+                "execute-api",
+                "eu-west-1",
+                "amazonaws",
+                "com"
+              ],
+              "path": [
+                "beta",
+                "get_history",
+                "get_transactions_by_timestamp"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "32850474-e031-70a5-a252-6629143f3cf8"
+                },
+                {
+                  "key": "end_timestamp",
+                  "value": "1779820932"
+                },
+                {
+                  "key": "start_timestamp",
+                  "value": "1778387966",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "4",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "_postman_previewlanguage": null,
+          "header": null,
+          "cookie": [],
+          "body": null
+        }
+      ]
+    },
+    {
+      "name": "add_transactions_api",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/transactions/{add_transaction_action}",
+          "protocol": "https",
+          "host": [
+            "dq9arr162l",
+            "execute-api",
+            "eu-west-1",
+            "amazonaws",
+            "com"
+          ],
+          "path": [
+            "beta",
+            "transactions",
+            "{add_transaction_action}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "upload",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"ajaykumarampajalapu007@gmail.com\",\r\n    \"transaction_id\": \"5731fa7a-109b-4419-96ea-d08e68c27b95\",\r\n    \"payment_amount\": 3313,\r\n    \"payment_date\": \"25-05-2026\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/transactions/upload",
+              "protocol": "https",
+              "host": [
+                "dq9arr162l",
+                "execute-api",
+                "eu-west-1",
+                "amazonaws",
+                "com"
+              ],
+              "path": [
+                "beta",
+                "transactions",
+                "upload"
+              ]
+            }
+          },
+          "_postman_previewlanguage": null,
+          "header": null,
+          "cookie": [],
+          "body": null
+        }
+      ]
+    }
+  ]
+}

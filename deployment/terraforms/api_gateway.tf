@@ -4,6 +4,7 @@ locals {
 module "api_gateway_rest_api" {
   source = "../modules/api_gateway"
   rest_api_name = local.api_name
+  binary_media_types = ["*/*"]
 }
 
 module "get_history" {

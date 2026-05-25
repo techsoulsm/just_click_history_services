@@ -34,4 +34,7 @@ module "add_transaction_lambda" {
   depends_on = [
     data.archive_file.archive,
   ]
+  layers = [
+    "arn:aws:lambda:${var.region}:336392948345:layer:AWSSDKPandas-Python311:12"
+  ]
 }

@@ -1,5 +1,6 @@
 import boto3
 import requests
+import pandas as pd
 
 
 def get_table(table_name):
@@ -19,13 +20,17 @@ def get_cognito_id_by_email(email, stage):
     response = requests.post(authentication_api_url, json={'email': email})
     if response.status_code != 200:
         raise Exception("Error fetching cognito id")
-    return response.json().get('cognito_id')
+    return response.json()
 
 def get_authentication_api(stage):
     configurations_table = get_table(Constant.CONFIGURATIONS_TABLE_NAME)
     response = configurations_table.get_item(Key={Constant.CONFIGURATIONS_TABLE_HASH_KEY: Constant.CONFIGURATIONS_TABLE_HASH_VALUE,
                                                   Constant.CONFIGURATIONS_TABLE_RANGE_KEY: f"{stage}_{Constant.CONFIGURATIONS_TABLE_RANGE_VALUE}"})
     return response['Item'].get('url_arn')
+
+def read_excel(file):
+    df = pd.read_excel(file)
+    return df.to_dict(orient='records')
 
 class Constant:
     HISTORY_TABLE_NAME = 'justclick_history'

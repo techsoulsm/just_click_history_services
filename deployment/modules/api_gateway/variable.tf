@@ -55,6 +55,24 @@ variable "cache_namespace" {
   description = "Name of the cache"
 }
 
+variable "binary_media_types" {
+  type = list(string)
+  default = []
+  description = "List of binary media types that API Gateway will treat as binary (e.g. multipart/form-data, application/octet-stream)"
+}
+
+variable "passthrough_behavior" {
+  type = string
+  default = "WHEN_NO_MATCH"
+  description = "Integration passthrough behavior for API Gateway integrations"
+}
+
+variable "content_handling" {
+  type = string
+  default = null
+  description = "Optional content handling for integration (CONVERT_TO_TEXT or CONVERT_TO_BINARY). Leave null to omit."
+}
+
 variable "timeout" {
   default = null
   description = "Timeout seconds from api gateway"

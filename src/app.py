@@ -16,6 +16,8 @@ def getHistory(event, context):
     
 def add_transaction(event, context):
     try:
+        file_content = event['body']
+        print(file_content)
         input_data, headers = modify_input.input_data(event)
         add_transaction_action = input_data.get('add_transaction_action')
         result = add_transactions(input_data, add_transaction_action, headers)

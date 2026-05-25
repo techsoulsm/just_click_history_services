@@ -47,6 +47,12 @@ variable "policy_document" {
   description = "Used to grant permissions to lambda execution to other resources"
 }
 
+variable "layers" {
+  type = list(string)
+  default = []
+  description = "Lambda layer ARNs to attach to the function"
+}
+
 variable "allow_cloud_watch_logs" {
   default = true
 }
