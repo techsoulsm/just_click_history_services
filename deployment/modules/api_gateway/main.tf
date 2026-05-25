@@ -120,7 +120,7 @@ resource "aws_api_gateway_method_response" "method_response" {
   response_models = {
     "application/json" = "Empty"
   }
-  depends_on = [aws_api_gateway_method.options_method]
+  depends_on = [aws_api_gateway_method.method]
 }
 
 resource "aws_api_gateway_integration_response" "integration_response" {
@@ -151,17 +151,12 @@ resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = var.rest_api_id
 
   triggers = {
-    redeploy = sha1(jsonencode(merge({
-      rest_api_id          = var.rest_api_id
-      path_part            = var.path_part
-      methods              = aws_api_gateway_method.method.*.http_method
-      uris                 = aws_api_gateway_integration.integration.*.uri
-      request_templates    = var.request_templates
-      request_parameters   = var.request_parameters
-      cache_key_parameters = var.cache_key_parameters
-      cache_namespace      = var.cache_namespace
-      timeout              = var.timeout
-    })))
+    # Redeploy when any of these resources change
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.resource,
+      aws_api_gateway_method.method,
+      aws_api_gateway_integration.integration,
+    ]))
   }
 
   depends_on = [aws_api_gateway_integration.integration]
