@@ -15,10 +15,12 @@ def add_transactions_decorator(function):
         def upload_transaction(*args, **kargs):
             print("upload_transaction called")
             input_data = args[0]
-            manditory_fields = ['email', 'transaction_id', 'payment_amount']
+            manditory_fields = ['email', 'transaction_id', 'payment_amount', 'admin_id', 'payment_date']
             for attribute in manditory_fields:
                 if attribute not in input_data:
                     raise Exception(f"Please provide {attribute}")
+            if helper.check_is_user_admin(input_data['admin_id']).lower() != 'true':
+                raise Exception("Uploader is not an admin.")
             input_data['unique_id'] = int(time.time())
             cognito_id = helper.get_cognito_id_by_email(input_data['email'], input_data.get('stage_name'))
             input_data['user_id'] = cognito_id
@@ -30,9 +32,14 @@ def add_transactions_decorator(function):
         def bulk_upload_transactions(*args, **kargs):
             print("bulk_upload_transactions called")
             input_data = args[0]
-            print(input_data)
-            # if 'transactions' not in input_data:
-            #     raise Exception("Please provide transactions")
+            manditory_fields = ['admin_id']
+            for attribute in manditory_fields:
+                if attribute not in input_data:
+                    raise Exception(f"Please provide {attribute}")
+            if helper.check_is_user_admin(input_data['admin_id']).lower() != 'true':
+                raise Exception("Uploader is not an admin.")
+            transactions = helper.read_excel(input_data['file_content'])
+            print(transactions)
             # with history_table.batch_writer() as batch:
             #     for transaction in input_data['transactions']:
             #         manditory_fields = ['user_id', 'transaction_id', 'amount']
