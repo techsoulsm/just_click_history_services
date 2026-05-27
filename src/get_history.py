@@ -126,9 +126,33 @@ def get_history_decorator(function):
                 Select='COUNT'
             )['Count']
             return response
+        
+        def get_users(*args, **kargs):
+            print("get_users called")
+            input_data = args[0]
+            if helper.check_is_user_admin(input_data['admin_id']).lower() != 'true':
+                raise Exception("User is not an admin.")
+            users_table = helper.get_table(constants.USERS_TABLE_NAME)
+            limit = int(input_data.get('limit', 50))
+            if 'LastEvaluatedKey' in input_data:
+                query_response = users_table.scan(
+                    Limit=limit,
+                    ExclusiveStartKey=json.loads(base64.b64decode(input_data['LastEvaluatedKey']).decode('utf-8'))
+                )
+            else:
+                query_response = users_table.scan(
+                    Limit=limit
+                )
+            results = {}
+            results['Items'] = query_response['Items']
+            if 'LastEvaluatedKey' in query_response:
+                results['LastEvaluatedKey'] = base64.b64encode(
+                    json.dumps(query_response.get('LastEvaluatedKey'), cls=DecimalEncoder).encode('utf-8')
+                ).decode('utf-8')
+            return results
 
         allowed_operations = {'get_transactions_by_user': get_transactions_by_user, 'get_transactions_by_timestamp': get_transactions_by_timestamp, 'get_transaction_by_id': get_transaction_by_id, 
-                              'get_last_transaction_by_user': get_last_transaction_by_user, 'get_total_transactions_by_user': get_total_transactions_by_user}
+                              'get_last_transaction_by_user': get_last_transaction_by_user, 'get_total_transactions_by_user': get_total_transactions_by_user, 'get_users': get_users}
         if args[1] not in allowed_operations:
             return f"provide one of the valid actions : {allowed_operations.keys()}"
         return allowed_operations[args[1]](*args, **kargs)
