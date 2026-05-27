@@ -1,4 +1,3 @@
-import base64
 import io
 import boto3
 import requests
@@ -31,7 +30,7 @@ def get_authentication_api(stage):
     return response['Item'].get('url_arn')
 
 def read_excel(file):
-    df = pd.read_excel(io.BytesIO(file), engine='openpyxl')
+    df = pd.read_excel(io.BytesIO(file))
     for column in ['email', 'transaction_id', 'payment_amount', 'payment_date']:
         if column not in df.columns:
             raise Exception(f"please provide {column}")

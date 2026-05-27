@@ -40,14 +40,12 @@ def add_transactions_decorator(function):
                 raise Exception("Uploader is not an admin.")
             transactions = helper.read_excel(input_data['file_content'])
             print(transactions)
-            # with history_table.batch_writer() as batch:
-            #     for transaction in input_data['transactions']:
-            #         manditory_fields = ['user_id', 'transaction_id', 'amount']
-            #         for attribute in manditory_fields:
-            #             if attribute not in transaction:
-            #                 raise Exception(f"Please provide {attribute} in all transactions")
-            #         transaction['unique_id'] = int(time.time())
-            #         batch.put_item(Item=transaction)
+            for transaction in transactions:
+                transaction['unique_id'] = int(time.time())
+                transaction['user_id'] = helper.get_cognito_id_by_email(transaction['email'], input_data.get('stage_name'))
+                transaction['payment_date'] = str(transaction['payment_date'])
+                print(transaction)
+                history_table.put_item(Item=transaction)
             return "Transactions uploaded successfully"
         
 

@@ -47,5 +47,11 @@ module "deployment" {
   source = "../modules/api_gateway"
   stage_name = var.stage
   rest_api_id = lookup(module.api_gateway_rest_api.rest_api_id, local.api_name)
+  binary_media_types = ["*/*"]
+  deployment_triggers = {
+    get_history_action      = "${module.get_history_action.path_part}:GET"
+    add_transaction_action  = "${module.add_transaction.path_part}:POST"
+    binary_media_types      = jsonencode(["*/*"])
+  }
   depends_on = [module.get_history_action, module.get_history, module.transactions, module.add_transaction]
 }

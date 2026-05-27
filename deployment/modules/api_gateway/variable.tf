@@ -61,6 +61,12 @@ variable "binary_media_types" {
   description = "List of binary media types that API Gateway will treat as binary (e.g. multipart/form-data, application/octet-stream)"
 }
 
+variable "deployment_triggers" {
+  type = map(any)
+  default = {}
+  description = "Extra values used to force API Gateway redeployment when external API definition changes occur."
+}
+
 variable "passthrough_behavior" {
   type = string
   default = "WHEN_NO_MATCH"

@@ -1,9 +1,10 @@
-import base64
 import traceback
 import response as response
 import modify_input as modify_input
 from get_history import get_history
 from add_transactions import add_transactions
+from email import message_from_bytes
+import base64
 
 def getHistory(event, context):
     try:
@@ -17,14 +18,35 @@ def getHistory(event, context):
     
 def add_transaction(event, context):
     try:
-        file_content = None
         if event.get("pathParameters", {}).get("add_transaction_action") == 'bulk_upload':
-            file_content = event.pop('body')
-            if event.get('isBase64Encoded'):
-                file_content = base64.b64decode(file_content)
+            content_type = event["headers"].get("content-type") or event["headers"].get("Content-Type")
+            body = event.pop("body")
+
+            # Decode base64
+            if event.get("isBase64Encoded", False):
+                body = base64.b64decode(body)
             else:
-                # If API Gateway passes raw text, keep bytes for Excel parsing.
-                file_content = file_content.encode('utf-8')
+                body = body.encode()
+
+            file_content = None
+
+            # Handle multipart/form-data
+            if content_type and "multipart/form-data" in content_type:
+                # Add fake headers so email parser can understand
+                full_message = b"Content-Type: " + content_type.encode() + b"\n\n" + body
+                msg = message_from_bytes(full_message)
+
+                for part in msg.walk():
+                    content_disposition = part.get("Content-Disposition", "")
+                    if "filename=" in content_disposition:
+                        file_content = part.get_payload(decode=True)
+                        break
+
+                if not file_content:
+                    raise Exception("File not found in multipart data")
+
+            else:
+                file_content = body
         input_data, headers = modify_input.input_data(event)
         add_transaction_action = input_data.get('add_transaction_action')
         if add_transaction_action == 'bulk_upload':

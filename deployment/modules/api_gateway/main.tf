@@ -153,14 +153,23 @@ resource "aws_api_gateway_deployment" "deployment" {
   count      = var.stage_name == null ? 0 : 1
   rest_api_id = var.rest_api_id
 
-  triggers = {
-    # Redeploy when any of these resources change
-    redeployment = sha1(jsonencode([
-      aws_api_gateway_resource.resource,
-      aws_api_gateway_method.method,
-      aws_api_gateway_integration.integration,
-    ]))
-  }
+  triggers = merge({
+    redeployment = sha1(jsonencode({
+      rest_api_id          = var.rest_api_id
+      stage_name           = var.stage_name
+      path_part            = var.path_part
+      http_method          = var.http_method
+      integration_type     = var.integration_type
+      request_templates    = var.request_templates
+      request_parameters   = var.request_parameters
+      cache_key_parameters = var.cache_key_parameters
+      cache_namespace      = var.cache_namespace
+      timeout              = var.timeout
+      content_handling     = var.content_handling
+      passthrough_behavior = var.passthrough_behavior
+      binary_media_types   = var.binary_media_types
+    }))
+  }, var.deployment_triggers)
 
   depends_on = [aws_api_gateway_integration.integration]
 
