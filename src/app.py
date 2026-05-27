@@ -47,6 +47,8 @@ def add_transaction(event, context):
 
             else:
                 file_content = body
+        else:
+            event['body'] = base64.b64decode(event['body']).decode("utf-8")
         input_data, headers = modify_input.input_data(event)
         add_transaction_action = input_data.get('add_transaction_action')
         if add_transaction_action == 'bulk_upload':
