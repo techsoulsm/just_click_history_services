@@ -44,7 +44,6 @@ def add_transactions_decorator(function):
                 transaction['unique_id'] = int(time.time())
                 transaction['user_id'] = helper.get_cognito_id_by_email(transaction['email'], input_data.get('stage_name'))
                 transaction['payment_date'] = str(transaction['payment_date'])
-                print(transaction)
                 history_table.put_item(Item=transaction)
             return "Transactions uploaded successfully"
         
