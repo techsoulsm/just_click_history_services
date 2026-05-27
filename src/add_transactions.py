@@ -39,7 +39,7 @@ def add_transactions_decorator(function):
             if helper.check_is_user_admin(input_data['admin_id']).lower() != 'true':
                 raise Exception("Uploader is not an admin.")
             transactions = helper.read_excel(input_data['file_content'])
-            print(transactions)
+            
             for transaction in transactions:
                 transaction['unique_id'] = int(time.time())
                 transaction['user_id'] = helper.get_cognito_id_by_email(transaction['email'], input_data.get('stage_name'))
