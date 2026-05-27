@@ -280,6 +280,49 @@
           "header": null,
           "cookie": [],
           "body": null
+        },
+        {
+          "name": "get_users",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/get_history/get_users?admin_id=32850474-e031-70a5-a252-6629143f3cf8&limit=3&LastEvaluatedKey=eyJ1bmlxdWVfaWQiOiAxNzc4NDc0MzY2LCAidXNlcl9pZCI6ICIzMjg1MDQ3NC1lMDMxLTcwYTUtYTI1Mi02NjI5MTQzZjNjZjgifQ==",
+              "protocol": "https",
+              "host": [
+                "dq9arr162l",
+                "execute-api",
+                "eu-west-1",
+                "amazonaws",
+                "com"
+              ],
+              "path": [
+                "beta",
+                "get_history",
+                "get_users"
+              ],
+              "query": [
+                {
+                  "key": "admin_id",
+                  "value": "32850474-e031-70a5-a252-6629143f3cf8"
+                },
+                {
+                  "key": "limit",
+                  "value": "3",
+                  "type": "text"
+                },
+                {
+                  "key": "LastEvaluatedKey",
+                  "value": "eyJ1bmlxdWVfaWQiOiAxNzc4NDc0MzY2LCAidXNlcl9pZCI6ICIzMjg1MDQ3NC1lMDMxLTcwYTUtYTI1Mi02NjI5MTQzZjNjZjgifQ==",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "_postman_previewlanguage": null,
+          "header": null,
+          "cookie": [],
+          "body": null
         }
       ]
     },
@@ -322,7 +365,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"ajaykumarampajalapu007@gmail.com\",\r\n    \"transaction_id\": \"5731fa7a-109b-4419-96ea-d08e68c27b95\",\r\n    \"payment_amount\": 3313,\r\n    \"payment_date\": \"25-05-2026\"\r\n}",
+              "raw": "{\r\n    \"email\": \"ajaykumarampajalapu007@gmail.com\",\r\n    \"transaction_id\": \"5731fa7a-109b-4419-96ea-d08e68c27b95\",\r\n    \"payment_amount\": 331399,\r\n    \"payment_date\": \"25-05-2026\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -330,7 +373,7 @@
               }
             },
             "url": {
-              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/transactions/upload",
+              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/transactions/upload?admin_id=32850474-e031-70a5-a252-6629143f3cf8",
               "protocol": "https",
               "host": [
                 "dq9arr162l",
@@ -343,6 +386,61 @@
                 "beta",
                 "transactions",
                 "upload"
+              ],
+              "query": [
+                {
+                  "key": "admin_id",
+                  "value": "32850474-e031-70a5-a252-6629143f3cf8"
+                }
+              ]
+            }
+          },
+          "_postman_previewlanguage": null,
+          "header": null,
+          "cookie": [],
+          "body": null
+        },
+        {
+          "name": "bulk_upload",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "",
+                  "type": "file",
+                  "uuid": "fc17c67d-d239-46c7-a14a-bcec22378294",
+                  "src": "/C:/Users/ganes/Downloads/transactions_bulk_upload.xlsx"
+                }
+              ],
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/transactions/bulk_upload?admin_id=32850474-e031-70a5-a252-6629143f3cf8",
+              "protocol": "https",
+              "host": [
+                "dq9arr162l",
+                "execute-api",
+                "eu-west-1",
+                "amazonaws",
+                "com"
+              ],
+              "path": [
+                "beta",
+                "transactions",
+                "bulk_upload"
+              ],
+              "query": [
+                {
+                  "key": "admin_id",
+                  "value": "32850474-e031-70a5-a252-6629143f3cf8"
+                }
               ]
             }
           },
