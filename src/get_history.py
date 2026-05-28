@@ -139,12 +139,16 @@ def get_history_decorator(function):
             users_table = helper.get_table(constants.USERS_TABLE_NAME)
             limit = int(input_data.get('limit', 50))
             if 'LastEvaluatedKey' in input_data:
-                query_response = users_table.scan(
+                query_response = users_table.query(
+                    IndexName=constants.USERS_TABLE_STAGE_INDEX_NAME,
+                    KeyConditionExpression=Key(constants.USERS_TABLE_STAGE_INDEX_HASH_KEY).eq(input_data['stage_name']),
                     Limit=limit,
                     ExclusiveStartKey=json.loads(base64.b64decode(input_data['LastEvaluatedKey']).decode('utf-8'))
                 )
             else:
-                query_response = users_table.scan(
+                query_response = users_table.query(
+                    IndexName=constants.USERS_TABLE_STAGE_INDEX_NAME,
+                    KeyConditionExpression=Key(constants.USERS_TABLE_STAGE_INDEX_HASH_KEY).eq(input_data['stage_name']),
                     Limit=limit
                 )
             results = {}

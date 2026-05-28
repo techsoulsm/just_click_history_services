@@ -52,3 +52,5 @@ class Constant:
     CONFIGURATIONS_TABLE_HASH_VALUE = 'All'
     CONFIGURATIONS_TABLE_RANGE_VALUE = 'authentication_api_details'
     FETCH_COGNITO_ID_ACTION = 'fetch_cognito_id_by_email'
+    USERS_TABLE_STAGE_INDEX_NAME = 'stage_index'
+    USERS_TABLE_STAGE_INDEX_HASH_KEY = 'stage_name'
