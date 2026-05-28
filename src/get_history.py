@@ -49,12 +49,14 @@ def get_history_decorator(function):
                 if attribute not in input_data:
                     raise Exception(f"Please provide {attribute}")
             start_timestamp = int(input_data.get('start_timestamp', 0))
-            end_timestamp = int(input_data.get('end_timestamp', time.time()))
+            end_timestamp = int(input_data.get('end_timestamp', time.time() * 1000))
             limit = int(input_data.get('limit', 50))
             if 'LastEvaluatedKey' in input_data:
                 if helper.check_is_user_admin(input_data['user_id']).lower() == 'true':
-                    query_response = history_table.scan(
-                        FilterExpression=Key(constants.HISTORY_TABLE_RANGE_KEY).between(start_timestamp, end_timestamp),
+                    query_response = history_table.query(
+                        IndexName=constants.HISTORY_TABLE_UNIQUE_ID_INDEX_NAME,
+                        KeyConditionExpression=Key(constants.HISTORY_TABLE_UNIQUE_ID_INDEX_HASH_KEY).eq(input_data['stage_name']) & Key(constants.HISTORY_TABLE_UNIQUE_ID_INDEX_RANGE_KEY).between(start_timestamp, end_timestamp),
+                        ScanIndexForward=True,
                         Limit=limit,
                         ExclusiveStartKey=json.loads(base64.b64decode(input_data['LastEvaluatedKey']).decode('utf-8'))
                     )
@@ -67,8 +69,10 @@ def get_history_decorator(function):
                     )
             else:
                 if helper.check_is_user_admin(input_data['user_id']).lower() == 'true':
-                    query_response = history_table.scan(
-                        FilterExpression=Key(constants.HISTORY_TABLE_RANGE_KEY).between(start_timestamp, end_timestamp),
+                    query_response = history_table.query(
+                        IndexName=constants.HISTORY_TABLE_UNIQUE_ID_INDEX_NAME,
+                        KeyConditionExpression=Key(constants.HISTORY_TABLE_UNIQUE_ID_INDEX_HASH_KEY).eq(input_data['stage_name']) & Key(constants.HISTORY_TABLE_UNIQUE_ID_INDEX_RANGE_KEY).between(start_timestamp, end_timestamp),
+                        ScanIndexForward=True,
                         Limit=limit
                     )
                 else:
@@ -120,7 +124,7 @@ def get_history_decorator(function):
                 if attribute not in input_data:
                     raise Exception(f"Please provide {attribute}")
             start_timestamp = int(input_data.get('start_timestamp', 0))
-            end_timestamp = int(input_data.get('end_timestamp', time.time()))
+            end_timestamp = int(input_data.get('end_timestamp', time.time() * 1000))
             response = history_table.query(
                 KeyConditionExpression=Key(constants.HISTORY_TABLE_HASH_KEY).eq(input_data['user_id']) & Key(constants.HISTORY_TABLE_RANGE_KEY).between(start_timestamp, end_timestamp),
                 Select='COUNT'

@@ -21,7 +21,7 @@ def add_transactions_decorator(function):
                     raise Exception(f"Please provide {attribute}")
             if helper.check_is_user_admin(input_data['admin_id']).lower() != 'true':
                 raise Exception("Uploader is not an admin.")
-            input_data['unique_id'] = int(time.time())
+            input_data['unique_id'] = int(time.time() * 1000)
             cognito_id = helper.get_cognito_id_by_email(input_data['email'], input_data.get('stage_name'))
             input_data['user_id'] = cognito_id
             dynamodb_response = history_table.put_item(Item=input_data)
@@ -41,9 +41,10 @@ def add_transactions_decorator(function):
             transactions = helper.read_excel(input_data['file_content'])
             
             for transaction in transactions:
-                transaction['unique_id'] = int(time.time())
+                transaction['unique_id'] = int(time.time() * 1000)
                 transaction['user_id'] = helper.get_cognito_id_by_email(transaction['email'], input_data.get('stage_name'))
                 transaction['payment_date'] = str(transaction['payment_date'])
+                transaction['stage_name'] = input_data.get('stage_name')
                 history_table.put_item(Item=transaction)
             return "Transactions uploaded successfully"
         

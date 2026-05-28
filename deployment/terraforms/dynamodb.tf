@@ -11,6 +11,11 @@ module "history_service_table" {
     {
       name = "transaction_id_index"
       hash_key = {name = "transaction_id"}
+    },
+    {
+      name = "stage_unique_id_index"
+      hash_key = {name = "stage_name", type = "S"}
+      range_key = {name = "unique_id", type = "N"}
     }
   ]
 }
