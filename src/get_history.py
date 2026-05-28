@@ -23,14 +23,14 @@ def get_history_decorator(function):
             if 'LastEvaluatedKey' in input_data:
                 query_response = history_table.query(
                     KeyConditionExpression=Key(constants.HISTORY_TABLE_HASH_KEY).eq(input_data['user_id']),
-                    ScanIndexForward=True,
+                    ScanIndexForward=False,
                     Limit=limit,
                     ExclusiveStartKey=json.loads(base64.b64decode(input_data['LastEvaluatedKey']).decode('utf-8'))
                 )
             else:
                 query_response = history_table.query(
                     KeyConditionExpression=Key(constants.HISTORY_TABLE_HASH_KEY).eq(input_data['user_id']),
-                    ScanIndexForward=True,
+                    ScanIndexForward=False,
                     Limit=limit
                 )
             results = {}
@@ -56,14 +56,14 @@ def get_history_decorator(function):
                     query_response = history_table.query(
                         IndexName=constants.HISTORY_TABLE_UNIQUE_ID_INDEX_NAME,
                         KeyConditionExpression=Key(constants.HISTORY_TABLE_UNIQUE_ID_INDEX_HASH_KEY).eq(input_data['stage_name']) & Key(constants.HISTORY_TABLE_UNIQUE_ID_INDEX_RANGE_KEY).between(start_timestamp, end_timestamp),
-                        ScanIndexForward=True,
+                        ScanIndexForward=False,
                         Limit=limit,
                         ExclusiveStartKey=json.loads(base64.b64decode(input_data['LastEvaluatedKey']).decode('utf-8'))
                     )
                 else:
                     query_response = history_table.query(
                         KeyConditionExpression=Key(constants.HISTORY_TABLE_HASH_KEY).eq(input_data['user_id']) & Key(constants.HISTORY_TABLE_RANGE_KEY).between(start_timestamp, end_timestamp),
-                        ScanIndexForward=True,
+                        ScanIndexForward=False,
                         Limit=limit,
                         ExclusiveStartKey=json.loads(base64.b64decode(input_data['LastEvaluatedKey']).decode('utf-8'))
                     )
@@ -72,13 +72,13 @@ def get_history_decorator(function):
                     query_response = history_table.query(
                         IndexName=constants.HISTORY_TABLE_UNIQUE_ID_INDEX_NAME,
                         KeyConditionExpression=Key(constants.HISTORY_TABLE_UNIQUE_ID_INDEX_HASH_KEY).eq(input_data['stage_name']) & Key(constants.HISTORY_TABLE_UNIQUE_ID_INDEX_RANGE_KEY).between(start_timestamp, end_timestamp),
-                        ScanIndexForward=True,
+                        ScanIndexForward=False,
                         Limit=limit
                     )
                 else:
                     query_response = history_table.query(
                         KeyConditionExpression=Key(constants.HISTORY_TABLE_HASH_KEY).eq(input_data['user_id']) & Key(constants.HISTORY_TABLE_RANGE_KEY).between(start_timestamp, end_timestamp),
-                        ScanIndexForward=True,
+                        ScanIndexForward=False,
                         Limit=limit
                     )
             results = {}
