@@ -1,9 +1,9 @@
 #!/bin/bash
-stack=${stack:-authentication_service}
+stack=${stack:-history_service}
 stage=${stage:-beta}
 region=${region:-'eu-west-1'}
 aws_profile=${aws_profile:-savir}
-terraform_path=${terraform_path:-deployment/static}
+terraform_path=${terraform_path:-deployment/terraforms}
 export AWS_PROFILE=$aws_profile
 help()
 {
@@ -32,7 +32,7 @@ do
       stack="$2"
       shift 2
       ;;
-    -path | --path )
+    -p | --path )
       terraform_path="$2"
       shift 2
       ;;
