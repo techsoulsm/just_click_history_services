@@ -15,14 +15,14 @@ def add_transactions_decorator(function):
         def upload_transaction(*args, **kargs):
             print("upload_transaction called")
             input_data = args[0]
-            manditory_fields = ['email', 'transaction_id', 'payment_amount', 'admin_id', 'payment_date']
+            manditory_fields = ['username', 'transaction_id', 'payment_amount', 'admin_id', 'payment_date']
             for attribute in manditory_fields:
                 if attribute not in input_data:
                     raise Exception(f"Please provide {attribute}")
             if helper.check_is_user_admin(input_data['admin_id']).lower() != 'true':
                 raise Exception("Uploader is not an admin.")
             input_data['unique_id'] = int(time.time() * 1000)
-            cognito_id = helper.get_cognito_id_by_email(input_data['email'], input_data.get('stage_name'))
+            cognito_id = helper.get_cognito_id_by_username(input_data['username'], input_data.get('stage_name'))
             input_data['user_id'] = cognito_id
             dynamodb_response = history_table.put_item(Item=input_data)
             if dynamodb_response['ResponseMetadata']['HTTPStatusCode'] != 200:
@@ -42,7 +42,7 @@ def add_transactions_decorator(function):
             
             for transaction in transactions:
                 transaction['unique_id'] = int(time.time() * 1000)
-                transaction['user_id'] = helper.get_cognito_id_by_email(transaction['email'], input_data.get('stage_name'))
+                transaction['user_id'] = helper.get_cognito_id_by_username(transaction['username'], input_data.get('stage_name'))
                 transaction['payment_date'] = str(transaction['payment_date'])
                 transaction['stage_name'] = input_data.get('stage_name')
                 history_table.put_item(Item=transaction)

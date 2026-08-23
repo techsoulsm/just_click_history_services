@@ -15,10 +15,10 @@ def check_is_user_admin(user_id):
         raise Exception("User not found")
     return response['Item'].get('isAdmin')
 
-def get_cognito_id_by_email(email, stage):
+def get_cognito_id_by_username(username, stage):
     authentication_api_url = get_authentication_api(stage)
     authentication_api_url = authentication_api_url.replace("{action}", Constant.FETCH_COGNITO_ID_ACTION)
-    response = requests.post(authentication_api_url, json={'email': email})
+    response = requests.post(authentication_api_url, json={'username': username})
     if response.status_code != 200:
         raise Exception("Error fetching cognito id")
     return response.json()
@@ -31,7 +31,7 @@ def get_authentication_api(stage):
 
 def read_excel(file):
     df = pd.read_excel(io.BytesIO(file))
-    for column in ['email', 'transaction_id', 'payment_amount', 'payment_date']:
+    for column in ['username', 'transaction_id', 'payment_amount', 'payment_date']:
         if column not in df.columns:
             raise Exception(f"please provide {column}")
     return df.to_dict(orient='records')
@@ -51,6 +51,6 @@ class Constant:
     CONFIGURATIONS_TABLE_RANGE_KEY = 'configurationGroup'
     CONFIGURATIONS_TABLE_HASH_VALUE = 'All'
     CONFIGURATIONS_TABLE_RANGE_VALUE = 'authentication_api_details'
-    FETCH_COGNITO_ID_ACTION = 'fetch_cognito_id_by_email'
+    FETCH_COGNITO_ID_ACTION = 'fetch_cognito_id_by_username'
     USERS_TABLE_STAGE_INDEX_NAME = 'stage_index'
     USERS_TABLE_STAGE_INDEX_HASH_KEY = 'stage_name'

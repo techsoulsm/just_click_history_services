@@ -18,4 +18,6 @@ module "history_service_table" {
       range_key = {name = "unique_id", type = "N"}
     }
   ]
+  stream_enabled = true
+  stream_view_type = "NEW_IMAGE"
 }
