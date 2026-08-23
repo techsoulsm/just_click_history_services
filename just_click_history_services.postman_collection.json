@@ -79,7 +79,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/get_history/get_transactions_by_timestamp?user_id=32850474-e031-70a5-a252-6629143f3cf8&end_timestamp=1778820932&start_timestamp=1778387966&limit=2&LastEvaluatedKey=eyJ1bmlxdWVfaWQiOiAxNzc4NDc0MzY2LCAidXNlcl9pZCI6ICIzMjg1MDQ3NC1lMDMxLTcwYTUtYTI1Mi02NjI5MTQzZjNjZjgifQ==",
+              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/get_history/get_transactions_by_timestamp?user_id=32850474-e031-70a5-a252-6629143f3cf8&end_timestamp=1778820932&start_timestamp=1778387966&limit=4&LastEvaluatedKey=eyJ1bmlxdWVfaWQiOiAxNzc4NDc0MzY2LCAidXNlcl9pZCI6ICIzMjg1MDQ3NC1lMDMxLTcwYTUtYTI1Mi02NjI5MTQzZjNjZjgifQ==",
               "protocol": "https",
               "host": [
                 "dq9arr162l",
@@ -108,7 +108,7 @@
                 },
                 {
                   "key": "limit",
-                  "value": "2"
+                  "value": "4"
                 },
                 {
                   "key": "LastEvaluatedKey",
@@ -239,7 +239,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/get_history/get_transactions_by_timestamp?user_id=32850474-e031-70a5-a252-6629143f3cf8&end_timestamp=1779820932&limit=4",
+              "raw": "https://dq9arr162l.execute-api.eu-west-1.amazonaws.com/beta/get_history/get_transactions_by_timestamp?user_id=32850474-e031-70a5-a252-6629143f3cf8&end_timestamp=1779820932&start_timestamp=1778387966&limit=4",
               "protocol": "https",
               "host": [
                 "dq9arr162l",
@@ -265,13 +265,11 @@
                 {
                   "key": "start_timestamp",
                   "value": "1778387966",
-                  "type": "text",
-                  "disabled": true
+                  "type": "text"
                 },
                 {
                   "key": "limit",
-                  "value": "4",
-                  "type": "text"
+                  "value": "4"
                 }
               ]
             }
@@ -365,7 +363,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"ajaykumarampajalapu007@gmail.com\",\r\n    \"transaction_id\": \"5731fa7a-109b-4419-96ea-d08e68c27b95\",\r\n    \"payment_amount\": 331399,\r\n    \"payment_date\": \"25-05-2026\"\r\n}",
+              "raw": "{\r\n    \"username\": \"ajaykumarampajalapu007@gmail.com\",\r\n    \"transaction_id\": \"6731fa7a-109b-4419-96ea-d08e68f27b99\",\r\n    \"payment_amount\": 9999999,\r\n    \"payment_date\": \"23-08-2026\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
