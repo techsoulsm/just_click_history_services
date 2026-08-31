@@ -97,9 +97,9 @@ def get_history_decorator(function):
                 if attribute not in input_data:
                     raise Exception(f"Please provide {attribute}")
             response = history_table.query(
-                KeyConditionExpression=Key(constants.HISTORY_TABLE_HASH_KEY).eq(input_data['user_id']),
-                FilterExpression=Attr(constants.HISTORY_TABLE_TRANSACTIONS_INDEX_HASH_KEY).eq(input_data['transaction_id'])
-            )['Items']
+                IndexName=constants.HISTORY_TABLE_TRANSACTIONS_INDEX_NAME,
+                KeyConditionExpression=Key(constants.HISTORY_TABLE_TRANSACTIONS_INDEX_HASH_KEY).eq(input_data['transaction_id'])
+            )['Items'][0]
             return response
         
         def get_last_transaction_by_user(*args, **kargs):

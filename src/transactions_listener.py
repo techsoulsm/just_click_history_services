@@ -31,7 +31,8 @@ def generate_alert_record(transaction, alert_type, description):
         'ttl': ttl_timestamp,
         'is_read': False,
         'description': description,
-        'stage_name': transaction.get('stage_name', '')
+        'stage_name': transaction.get('stage_name', ''),
+        'transaction_id': transaction.get('transaction_id', '')
     }
     return alert_record
 
