@@ -99,7 +99,7 @@ def get_history_decorator(function):
             response = history_table.query(
                 IndexName=constants.HISTORY_TABLE_TRANSACTIONS_INDEX_NAME,
                 KeyConditionExpression=Key(constants.HISTORY_TABLE_TRANSACTIONS_INDEX_HASH_KEY).eq(input_data['transaction_id'])
-            )['Items'][0]
+            )['Items']
             return response
         
         def get_last_transaction_by_user(*args, **kargs):
