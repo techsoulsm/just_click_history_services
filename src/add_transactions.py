@@ -24,6 +24,9 @@ def add_transactions_decorator(function):
             input_data['unique_id'] = int(time.time() * 1000)
             cognito_id = helper.get_cognito_id_by_username(input_data['username'], input_data.get('stage_name'))
             input_data['user_id'] = cognito_id
+            # add bonus upto 5 levels of parents
+            helper.add_transaction_amount_to_user_and_bonus_to_parents(cognito_id, input_data.get('stage_name'), 
+                                                                       input_data['payment_amount'])
             dynamodb_response = history_table.put_item(Item=input_data)
             if dynamodb_response['ResponseMetadata']['HTTPStatusCode'] != 200:
                 raise Exception("Error uploading transaction")
@@ -46,6 +49,8 @@ def add_transactions_decorator(function):
                 transaction['payment_date'] = str(transaction['payment_date'])
                 transaction['stage_name'] = input_data.get('stage_name')
                 history_table.put_item(Item=transaction)
+                helper.add_transaction_amount_to_user_and_bonus_to_parents(transaction['user_id'], input_data.get('stage_name'), 
+                                                                           transaction['payment_amount'])
             return "Transactions uploaded successfully"
         
 

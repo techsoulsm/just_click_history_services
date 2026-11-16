@@ -23,6 +23,30 @@ def get_cognito_id_by_username(username, stage):
         raise Exception("Error fetching cognito id")
     return response.json()
 
+def add_transaction_amount_to_user_and_bonus_to_parents(cognito_id, stage, payment_amount):
+    # First, add the transaction amount to the user
+    users_table = get_table(Constant.USERS_TABLE_NAME)
+    user_response = users_table.get_item(Key={'cognitoId': cognito_id})
+    if 'Item' not in user_response:
+        raise Exception("User not found")
+    user = user_response['Item']
+    user['wallet'] = user.get('wallet', 0) + payment_amount
+    user['membershipStatus'] = 'Active' if user['wallet'] > 0 else 'Expired'
+    users_table.put_item(Item=user)
+
+    # Then, add bonuses to parents
+    authentication_api_url = get_authentication_api(stage)
+    authentication_api_url = authentication_api_url.replace("{action}", Constant.FETCH_PARENTS_ACTION)
+    response = requests.post(authentication_api_url, json={'UserAliasId': cognito_id})
+    if response.status_code != 200:
+        raise Exception("Error fetching parent information")
+    parents = response.json()
+    if parents:
+        bonuses = Constant.REFERRAL_BONUSES
+        for index, parent in enumerate(parents):
+            parent['bonus'] = parent.get('bonus', 0) + bonuses[index]
+            users_table.put_item(Item=parent)
+
 def get_authentication_api(stage):
     configurations_table = get_table(Constant.CONFIGURATIONS_TABLE_NAME)
     response = configurations_table.get_item(Key={Constant.CONFIGURATIONS_TABLE_HASH_KEY: Constant.CONFIGURATIONS_TABLE_HASH_VALUE,
@@ -54,3 +78,5 @@ class Constant:
     FETCH_COGNITO_ID_ACTION = 'fetch_cognito_id_by_username'
     USERS_TABLE_STAGE_INDEX_NAME = 'stage_index'
     USERS_TABLE_STAGE_INDEX_HASH_KEY = 'stage_name'
+    FETCH_PARENTS_ACTION = 'get_parents'
+    REFERRAL_BONUSES = [50, 40, 30, 20, 10]
