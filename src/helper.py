@@ -31,7 +31,7 @@ def add_transaction_amount_to_user_and_bonus_to_parents(cognito_id, stage, payme
         raise Exception("User not found")
     user = user_response['Item']
     user['hasMembership'] = 'True'
-    user['wallet'] = user.get('wallet', 0) + payment_amount
+    user['wallet'] = user.get('wallet', 0) + int(payment_amount)
     user['membershipStatus'] = 'Active' if user['wallet'] > 0 else 'Due'
     users_table.put_item(Item=user)
 
